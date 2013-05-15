@@ -1,10 +1,12 @@
 import flask
 import os
-from raven import Client
+import raven
+from raven.contrib.flask import Sentry
 
 app = flask.Flask(__name__)
-client = Client(os.environ.get('SENTRY_DSN', ''))
-
+app.config['SENTRY_DSN'] = os.environ.get('SENTRY_DSN', '')
+client = raven.Client(os.environ.get('LOVE_DSN', ''))
+sentry = Sentry(app)
 
 @app.route("/errors", methods=["POST"])
 def errors():
