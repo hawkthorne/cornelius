@@ -1,0 +1,6 @@
+Flask==0.9
+Jinja2==2.6
+Werkzeug==0.8.3
+gunicorn==0.17.4
+distribute==0.6.31
+raven==3.3.6
