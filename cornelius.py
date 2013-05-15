@@ -8,6 +8,7 @@ app.config['SENTRY_DSN'] = os.environ.get('SENTRY_DSN', '')
 client = raven.Client(os.environ.get('LOVE_DSN', ''))
 sentry = Sentry(app)
 
+
 @app.route("/errors", methods=["POST"])
 def errors():
     payload = flask.request.json

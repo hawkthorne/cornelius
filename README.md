@@ -1,7 +1,7 @@
-# Journey to the Cente of Hawkthorne Game Server
+# Cornelius
 
-Server for Journey to the Center of Hawkthorne. LOVE lacks SSL support, so this
-server provides endpoints for tasks that require SSL.
+REST API for Journey to the Center of Hawkthorne. LOVE lacks SSL support, so
+this server provides endpoints for tasks that require SSL.
 
 ## Error Reporting
 
