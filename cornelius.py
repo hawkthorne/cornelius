@@ -1,6 +1,7 @@
 import base64
 import os
 import json
+import logging
 
 import requests
 import flask
@@ -23,6 +24,8 @@ def track(event, properties):
         return
     
     properties['token'] = token
+
+    logging.info(flask.request.headers.get('X-Forwarded-For'))
 
     if 'X-Forwarded-For' in flask.request.headers:
         properties['ip'] = flask.request.headers['X-Forwarded-For']
