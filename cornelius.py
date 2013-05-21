@@ -23,12 +23,9 @@ def track(event, properties):
     if token is None:
         return
     
-    properties['token'] = token
-
-    logging.info(flask.request.headers.get('X-Forwarded-For'))
-
     if 'X-Forwarded-For' in flask.request.headers:
-        properties['ip'] = flask.request.headers['X-Forwarded-For']
+        ips = flask.request.headers['X-Forwarded-For'].split(",")
+        properties['ip'] = ips[0]
 
     params = {
         'event': event,
