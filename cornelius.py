@@ -1,5 +1,9 @@
-import flask
+import base64
 import os
+import json
+
+import requests
+import flask
 import raven
 from raven.contrib.flask import Sentry
 
@@ -7,6 +11,48 @@ app = flask.Flask(__name__)
 app.config['SENTRY_DSN'] = os.environ.get('SENTRY_DSN', '')
 client = raven.Client(os.environ.get('LOVE_DSN', ''))
 sentry = Sentry(app)
+
+
+def track(event, properties):
+    if not event:
+        return
+
+    token = os.environ.get('MIXPANEL_TOKEN', None)
+
+    if token is None:
+        return
+    
+    properties['token'] = token
+
+    if 'X-Forwarded-For' in flask.request.headers:
+        properties['ip'] = flask.request.headers['X-Forwarded-For']
+
+    params = {
+        'event': event,
+        'properties': properties,
+    }
+
+    data = base64.b64encode(json.dumps(params))
+    url = "http://api.mixpanel.com/track/?data=" + data
+
+    return requests.get(url)
+
+
+
+@app.route("/metrics", methods=["POST"])
+def metrics():
+    payload = flask.request.json
+
+    if payload is None or not isinstance(payload, dict):
+        return flask.jsonify(message="Could not decode JSON object"), 400
+
+    if 'metrics' not in payload:
+        return flask.jsonify(message="Key 'metrics' is required in JSON payload"), 400
+
+    for metric in payload['metrics']:
+        track(metric.get('event'), metric.get('properties', {}))
+
+    return flask.jsonify(success=True), 201
 
 
 @app.route("/errors", methods=["POST"])
