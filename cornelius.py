@@ -23,12 +23,11 @@ def track(event, properties):
     if token is None:
         return
 
-    logging.error(flask.request.headers.get('X-Forwarded-For'))
     
     if 'X-Forwarded-For' in flask.request.headers:
         ips = flask.request.headers['X-Forwarded-For'].split(",")
-        logging.error(ips[0])
         properties['ip'] = ips[0]
+        properties['distinct_id'] = ips[0]
 
     params = {
         'event': event,
