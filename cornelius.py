@@ -22,6 +22,8 @@ def track(event, properties):
 
     if token is None:
         return
+
+    logging.error(flask.request.headers.get('X-Forwarded-For'))
     
     if 'X-Forwarded-For' in flask.request.headers:
         ips = flask.request.headers['X-Forwarded-For'].split(",")
