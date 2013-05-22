@@ -27,6 +27,7 @@ def track(event, properties):
     
     if 'X-Forwarded-For' in flask.request.headers:
         ips = flask.request.headers['X-Forwarded-For'].split(",")
+        logging.error(ips[0])
         properties['ip'] = ips[0]
 
     params = {
