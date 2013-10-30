@@ -24,9 +24,11 @@ def track(event, properties):
         return
 
     properties['token'] = token
-    
-    if 'X-Forwarded-For' in flask.request.headers:
-        ips = flask.request.headers['X-Forwarded-For'].split(",")
+
+    headers = flask.request.headers
+
+    if 'distinct_id' not in properties and 'X-Forwarded-For' in headers:
+        ips = headers['X-Forwarded-For'].split(",")
         properties['ip'] = ips[0]
         properties['distinct_id'] = ips[0]
 
