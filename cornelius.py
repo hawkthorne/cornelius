@@ -18,8 +18,11 @@ def track(event, properties):
     if not event:
         return
 
-    token = os.environ['MIXPANEL_TOKEN']
-    dev_token = os.environ['MIXPANEL_DEV_TOKEN']
+    token = os.environ.get('MIXPANEL_TOKEN', None)
+    dev_token = os.environ.get('MIXPANEL_DEV_TOKEN', None)
+
+    if token is None or dev_token is None:
+        return
 
     if properties.get('version', '0.0.0') == '0.0.0':
         properties['token'] = dev_token
