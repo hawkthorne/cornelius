@@ -18,12 +18,13 @@ def track(event, properties):
     if not event:
         return
 
-    token = os.environ.get('MIXPANEL_TOKEN', None)
+    token = os.environ['MIXPANEL_TOKEN']
+    dev_token = os.environ['MIXPANEL_DEV_TOKEN']
 
-    if token is None:
-        return
-
-    properties['token'] = token
+    if properties.get('version', '0.0.0') == '0.0.0':
+        properties['token'] = dev_token
+    else:
+        properties['token'] = token
 
     headers = flask.request.headers
 
